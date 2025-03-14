@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import Entity.Player;
+
 public class GamePanel extends JPanel implements Runnable {
 
 	// Screen Settings
@@ -14,21 +16,23 @@ public class GamePanel extends JPanel implements Runnable {
 	private final int scale = 3; // For scaling characters etc. for higher resolutions
 
 	private final int tileSize = originalTitleSize * scale; // 48x48 tile
+
 	private final int maxScreenCol = 16;
 	private final int maxScreenRow = 12;
 	private final int screenWidth = tileSize * maxScreenCol; // 768 pixels
 	private final int screenHeight = tileSize * maxScreenRow; // 576 pixels
 
 	// FPS
-	int FPS = 60;
+	private int FPS = 60;
 
 	private KeyHandler keyHandler = new KeyHandler();
 	private Thread gameThread;
-
-	// Set player's default position
-	private int playerX = 100;
-	private int playerY = 100;
-	private int playerSpeed = 4;
+	Player player = new Player(this, this.keyHandler);
+	
+	// GETTERS
+	public int getTileSize() {
+		return tileSize;
+	}
 
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -58,7 +62,6 @@ public class GamePanel extends JPanel implements Runnable {
 
 			repaint(); // Sends a repaint request. Draws the updated content by calling the
 						// paintComponent(Graphics g) method at the appropriate time.
-
 			try {
 				double remainingTime = nextDrawTime - System.nanoTime(); // Time left until next drawing (to keep FPS constant)
 				remainingTime = remainingTime / 1000000;
@@ -79,16 +82,8 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void update() { // UPDATE: updates information such as character positions
-
-		if (keyHandler.isUpPressed()) { // X increases to the right & Y increases to the down
-			playerY -= playerSpeed;
-		} else if (keyHandler.isDownPressed()) {
-			playerY += playerSpeed;
-		} else if (keyHandler.isRightPressed()) {
-			playerX += playerSpeed;
-		} else if (keyHandler.isLeftPressed()) {
-			playerX -= playerSpeed;
-		}
+		
+		player.update();
 	}
 
 	public void paintComponent(Graphics g) { // DRAW: draws the screen with the updated information
@@ -96,10 +91,8 @@ public class GamePanel extends JPanel implements Runnable {
 		super.paintComponent(g);
 
 		Graphics2D g2 = (Graphics2D) g; // For drawing
-
-		g2.setColor(Color.white);
-
-		g2.fillRect(playerX, playerY, tileSize, tileSize);
+		
+		player.draw(g2);
 
 		g2.dispose();
 	}
