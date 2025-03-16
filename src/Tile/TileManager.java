@@ -19,9 +19,9 @@ public class TileManager {
 	public TileManager(GamePanel gp) {
 		this.gp = gp;
 		tiles = new Tile[48];
-		mapTileNum = new int[gp.getMaxScreenCol()][gp.getMaxScreenRow()];
+		mapTileNum = new int[gp.getMaxWorldCol()][gp.getMaxWorldRow()];
 		getTileImage();
-		loadMap("/maps/map01.txt");
+		loadMap("/maps/world01.txt");
 	}
 
 	public void getTileImage() {
@@ -48,7 +48,7 @@ public class TileManager {
 
 	}
 
-	public void loadMap(String filePath) {
+	public void loadMap(String filePath) { // Load Map Method
 		try {
 			InputStream is = getClass().getResourceAsStream(filePath);
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -56,11 +56,11 @@ public class TileManager {
 			int col = 0;
 			int row = 0;
 
-			while (col < gp.getMaxScreenCol() && row < gp.getMaxScreenRow()) {
+			while (col < gp.getMaxWorldCol() && row < gp.getMaxWorldRow()) {
 
 				String line = br.readLine(); // Reads text line
 
-				while (col < gp.getMaxScreenCol()) {
+				while (col < gp.getMaxWorldCol()) {
 
 					String nums[] = line.split(" ");
 
@@ -69,7 +69,7 @@ public class TileManager {
 					mapTileNum[col][row] = num;
 					col++;
 				}
-				if (col == gp.getMaxScreenCol()) {
+				if (col == gp.getMaxWorldCol()) {
 					col = 0;
 					row++;
 				}
@@ -81,25 +81,27 @@ public class TileManager {
 		}
 	}
 
-	public void draw(Graphics2D g2) {
+	public void draw(Graphics2D g2) { // Draw the map
 		
-		int col = 0;
-		int row = 0;
-		int x = 0;
-		int y = 0;
+		int worldCol = 0;
+		int worldRow = 0;
 		
-		while (col < gp.getMaxScreenCol() && row < gp.getMaxScreenRow()) {
+		while (worldCol < gp.getMaxWorldCol() && worldRow < gp.getMaxWorldRow()) {
 			
-			int tileNum = mapTileNum[col][row];
-			g2.drawImage(tiles[tileNum].getImage(), x, y, gp.getTileSize(), gp.getTileSize(), null);
-			col++;
-			x += gp.getTileSize();
+			int tileNum = mapTileNum[worldCol][worldRow];
 			
-			if (col == gp.getMaxScreenCol()) {
-				col = 0;
-				x = 0;
-				row++;
-				y += gp.getTileSize();
+			// Calculating where the tile will appear on the screen. (Camera Logic)
+			int worldX = worldCol * gp.getTileSize();
+			int worldY = worldRow * gp.getTileSize();
+			int screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX();
+			int screenY = worldY - gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY();
+			
+			g2.drawImage(tiles[tileNum].getImage(), screenX, screenY, gp.getTileSize(), gp.getTileSize(), null);
+			worldCol++;
+			
+			if (worldCol == gp.getMaxWorldCol()) {
+				worldCol = 0;
+				worldRow++;
 			}
 		}
 	}

@@ -4,17 +4,17 @@ import java.awt.image.BufferedImage;
 
 public class Entity { // Super class for entities
 
-	private int x, y;
+	private int worldX, worldY;
 	private int speed;
 	private String direction; // 0: Down, 1: Left, 2: Right, 3: Up
 
 	// GETTERS
-	public int getX() {
-		return x;
+	public int getWorldX() {
+		return worldX;
 	}
 
-	public int getY() {
-		return y;
+	public int getWorldY() {
+		return worldY;
 	}
 
 	public int getSpeed() {
@@ -27,12 +27,12 @@ public class Entity { // Super class for entities
 
 	
 	// SETTERS
-    public void setX(int x) {
-        this.x = x;
+    public void setWorldX(int x) {
+        this.worldX = x;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setWorldY(int y) {
+        this.worldY = y;
     }
 
     public void setSpeed(int speed) {

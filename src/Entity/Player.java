@@ -14,6 +14,8 @@ public class Player extends Entity {
 
 	private GamePanel gp;
 	private KeyHandler keyHandler;
+	private final int screenX;
+	private final int screenY;
 
 	// For player animation
 	private BufferedImage[][] walkFrames;
@@ -21,18 +23,31 @@ public class Player extends Entity {
 	private int frameCounter = 0;
 	private int frameDelay = 10;
 	private int directionIndex = 0;
+	
+	// GETTERS
+	public int getScreenX() {
+		return screenX;
+	}
+
+	public int getScreenY() {
+		return screenY;
+	}
+
 
 	public Player(GamePanel gp, KeyHandler keyHandler) {
 		this.gp = gp;
 		this.keyHandler = keyHandler;
+		this.screenX = gp.getScreenWidth() / 2 - (gp.getTileSize() / 2);
+		this.screenY = gp.getScreenHeight() / 2 - (gp.getTileSize() / 2);
 		setDefaultValues();
 		getPlayerImage();
 	}
 
 	public void setDefaultValues() {
-		setX(100);
-		setY(100);
+		setWorldX(gp.getTileSize() * 46);
+		setWorldY(gp.getTileSize() * 42);
 		setSpeed(4);
+		setDirection("down");
 	}
 
 	public void getPlayerImage() {
@@ -61,22 +76,22 @@ public class Player extends Entity {
 		boolean walking = false;
 
 		if (keyHandler.isUpPressed()) {
-			setY(getY() - getSpeed());
+			setWorldY(getWorldY() - getSpeed());
 			setDirection("up");
 			directionIndex = 3;
 			walking = true;
 		} else if (keyHandler.isDownPressed()) {
-			setY(getY() + getSpeed());
+			setWorldY(getWorldY() + getSpeed());
 			setDirection("down");
 			directionIndex = 0;
 			walking = true;
 		} else if (keyHandler.isLeftPressed()) {
-			setX(getX() - getSpeed());
+			setWorldX(getWorldX() - getSpeed());
 			setDirection("left");
 			directionIndex = 1;
 			walking = true;
 		} else if (keyHandler.isRightPressed()) {
-			setX(getX() + getSpeed());
+			setWorldX(getWorldX() + getSpeed());
 			setDirection("right");
 			directionIndex = 2;
 			walking = true;
@@ -96,7 +111,7 @@ public class Player extends Entity {
 
 	public void draw(Graphics g2) {
 		BufferedImage image = walkFrames[directionIndex][frameIndex];
-		g2.drawImage(image, getX(), getY(), gp.getTileSize() + 96, gp.getTileSize() + 96, null);
+		g2.drawImage(image, screenX, screenY, gp.getTileSize() + 96, gp.getTileSize() + 96, null);
 	}
 
 }

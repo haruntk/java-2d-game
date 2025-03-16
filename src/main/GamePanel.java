@@ -14,14 +14,21 @@ public class GamePanel extends JPanel implements Runnable {
 
 	// Screen Settings
 	private final int originalTitleSize = 16; // 16x16 tile (characters etc.)
-	private final int scale = 6; // For scaling characters etc. for higher resolutions
+	private final int scale = 3; // For scaling characters etc. for higher resolutions
 
-	private final int tileSize = originalTitleSize * scale; // 128x128 tile
+	private final int tileSize = originalTitleSize * scale;
 
 	private final int maxScreenCol = 16;
 	private final int maxScreenRow = 12;
+
 	private final int screenWidth = tileSize * maxScreenCol;
-	private final int screenHeight = tileSize * maxScreenRow; 
+	private final int screenHeight = tileSize * maxScreenRow;
+	
+	// WORLD SETTINGS
+	private final int maxWorldCol = 100;
+	private final int maxWorldRow = 100;
+	private final int worldWidth = tileSize * maxWorldCol;
+	private final int worldHeight = tileSize * maxWorldRow;
 
 	// FPS
 	private int FPS = 60;
@@ -29,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
 	TileManager tileManager = new TileManager(this);
 	private KeyHandler keyHandler = new KeyHandler();
 	private Thread gameThread;
+
 	Player player = new Player(this, this.keyHandler);
 
 	// GETTERS
@@ -43,7 +51,33 @@ public class GamePanel extends JPanel implements Runnable {
 	public int getMaxScreenRow() {
 		return maxScreenRow;
 	}
+	
+	public int getScreenWidth() {
+		return screenWidth;
+	}
 
+	public int getScreenHeight() {
+		return screenHeight;
+	}
+	
+	public int getMaxWorldCol() {
+		return maxWorldCol;
+	}
+
+	public int getMaxWorldRow() {
+		return maxWorldRow;
+	}
+	
+	public Player getPlayer() {
+		return player;
+	}
+	
+	// SETTERS
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+	
+	
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
