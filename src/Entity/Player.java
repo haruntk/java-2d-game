@@ -49,7 +49,7 @@ public class Player extends Entity {
 			for (int row = 0; row < rows; row++) {
 				for (int col = 0; col < cols; col++) {
 					walkFrames[row][col] = spriteSheet.getSubimage(col * frameWidth, row * frameHeight, frameWidth,
-							frameHeight);
+							frameHeight); // Get sub images
 				}
 			}
 		} catch (IOException e) {
@@ -82,25 +82,21 @@ public class Player extends Entity {
 			walking = true;
 		}
 
-		if (walking) {
+		if (walking) { // Change animation frame (Every 10 frames)
 			frameCounter++;
 			if (frameCounter >= frameDelay) {
 				frameIndex = (frameIndex + 1) % walkFrames[directionIndex].length;
 				frameCounter = 0;
 			}
 		} else {
-			frameIndex = 0;
+			frameIndex = 0; // If character stops get back to first frame
 		}
 
 	}
 
 	public void draw(Graphics g2) {
-//		g2.setColor(Color.white);
-//
-//		g2.fillRect(getX(), getY(), gp.getTileSize(), gp.getTileSize());
-
 		BufferedImage image = walkFrames[directionIndex][frameIndex];
-		g2.drawImage(image, getX(), getY(), gp.getTileSize(), gp.getTileSize(), null);
+		g2.drawImage(image, getX(), getY(), gp.getTileSize() + 96, gp.getTileSize() + 96, null);
 	}
 
 }

@@ -8,35 +8,45 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import Entity.Player;
+import Tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
 
 	// Screen Settings
 	private final int originalTitleSize = 16; // 16x16 tile (characters etc.)
-	private final int scale = 3; // For scaling characters etc. for higher resolutions
+	private final int scale = 6; // For scaling characters etc. for higher resolutions
 
-	private final int tileSize = originalTitleSize * scale; // 48x48 tile
+	private final int tileSize = originalTitleSize * scale; // 128x128 tile
 
 	private final int maxScreenCol = 16;
 	private final int maxScreenRow = 12;
-	private final int screenWidth = tileSize * maxScreenCol; // 768 pixels
-	private final int screenHeight = tileSize * maxScreenRow; // 576 pixels
+	private final int screenWidth = tileSize * maxScreenCol;
+	private final int screenHeight = tileSize * maxScreenRow; 
 
 	// FPS
 	private int FPS = 60;
-
+	
+	TileManager tileManager = new TileManager(this);
 	private KeyHandler keyHandler = new KeyHandler();
 	private Thread gameThread;
 	Player player = new Player(this, this.keyHandler);
-	
+
 	// GETTERS
 	public int getTileSize() {
 		return tileSize;
 	}
+	
+	public int getMaxScreenCol() {
+		return maxScreenCol;
+	}
+
+	public int getMaxScreenRow() {
+		return maxScreenRow;
+	}
 
 	public GamePanel() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-		this.setBackground(Color.gray);
+		this.setBackground(Color.black);
 		this.setDoubleBuffered(true); // Enables double buffering to reduce flickering and improve rendering
 										// performance.
 		this.addKeyListener(keyHandler);
@@ -92,7 +102,9 @@ public class GamePanel extends JPanel implements Runnable {
 
 		Graphics2D g2 = (Graphics2D) g; // For drawing
 		
-		player.draw(g2);
+		tileManager.draw(g2); // Draw tiles
+		
+		player.draw(g2); // Draw player
 
 		g2.dispose();
 	}

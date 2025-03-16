@@ -6,7 +6,7 @@ public class Entity { // Super class for entities
 
 	private int x, y;
 	private int speed;
-	private String direction;
+	private String direction; // 0: Down, 1: Left, 2: Right, 3: Up
 
 	// GETTERS
 	public int getX() {
